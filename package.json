@@ -1,0 +1,20 @@
+{
+  "name": "redux-react-code",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asaadsaad/redux-react-code.git"
+  },
+  "keywords": [],
+  "author": "Asaad Saad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/asaadsaad/redux-react-code/issues"
+  },
+  "homepage": "https://github.com/asaadsaad/redux-react-code#readme"
+}
