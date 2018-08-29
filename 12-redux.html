@@ -1,0 +1,106 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.0/redux.min.js"></script>
+<script src="https://unpkg.com/expect@1.20.2/umd/expect.min.js"></script>
+
+<body>
+    <div id="root"></div>
+</body>
+
+<script type="text/babel">
+
+    const { createStore, combineReducers } = Redux;
+    let todo_id_counter = 0;
+
+    function todos_reducer(state = [], action) {
+        switch (action.type) {
+            case 'ADD_TODO': return [...state, action.payload]
+            case 'TOGGLE_TODO': return state.map(todoObj => {
+                if(todoObj.id === action.id) return {...todoObj, completed: !todoObj.completed}; else return todoObj;
+            });
+            default: return state;
+        }
+    }
+
+    function visibility_reducer(state='ALL', action){
+        switch (action.type) {
+            case 'CHANGE_VISIBILITY': return action.payload;
+            default: return state;
+        }        
+    }
+
+    const reducer = combineReducers({
+        todos: todos_reducer,
+        visivility: visibility_reducer
+    })
+
+    const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
+
+    class Form extends React.Component{
+        constructor(props) {
+            super(props);
+            this.textInput = React.createRef();
+        }
+        render(){
+            return(
+                <div>
+                    <input ref={this.textInput} />
+                    <button onClick={()=> { 
+                        store.dispatch({
+                            type: 'ADD_TODO', 
+                            payload: {id: ++todo_id_counter, text: this.textInput.current.value, completed: false}}); 
+                        this.textInput.current.value = ''; }}>Add Todo</button>
+                </div>
+            )
+        }
+    }
+
+    class VisibilityButtons extends React.Component{
+        render(){
+            return(
+                <div>
+                <button onClick={()=>store.dispatch({type: 'CHANGE_VISIBILITY', payload: 'ALL'})}>All</button>
+                <button onClick={()=>store.dispatch({type: 'CHANGE_VISIBILITY', payload: 'ACTIVE'})}>Active</button>
+                <button onClick={()=>store.dispatch({type: 'CHANGE_VISIBILITY', payload: 'COMPLETED'})}>Completed</button>
+            </div>
+            )
+        }
+    }
+
+    const Todo  = ({todo})=>(
+        <li onClick={()=> { 
+                            store.dispatch({
+                                type: 'TOGGLE_TODO', 
+                                id: todo.id
+                            })
+                        }}
+                        style={{textDecoration: todo.completed? 'line-through': 'none'}}>{todo.text}</li>
+    )
+    class TodoApp extends React.Component{
+        render(){
+            const { todos, visibility } = this.props;
+            return(
+                <div>
+                    <Form />
+                    <ul>
+                        {todos
+                            .filter(todo=> {switch(visibility){
+                                case 'ALL': return true;
+                                case 'ACTIVE': return todo.completed === false;
+                                case 'COMPLETED': return todo.completed === true;
+                            }})
+                            .map(todo => <Todo key={todo.id} todo={todo}/>)}
+                    </ul>
+                    <VisibilityButtons />
+                </div>
+            );
+        }
+    }
+
+    const render = () => { ReactDOM.render(<TodoApp todos={store.getState().todos} visibility={store.getState().visivility} />, document.getElementById('root')) };
+    render()
+    store.subscribe(render)
+
+</script>
