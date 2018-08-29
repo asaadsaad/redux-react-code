@@ -1,43 +1,64 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
-<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.0/redux.min.js"></script>
 <script src="https://unpkg.com/expect@1.20.2/umd/expect.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/deep-freeze@0.0.1/index.min.js"></script>
 
-<body>
-    <div id="root"></div>
-</body>
+<script>
 
-<script type="text/babel">
-    const { createStore } = Redux;
-
-    function reducer(state = 0, action) {
-        switch (action.type) {
-            case 'INCREMENT': return state + 1;
-            case 'DECREMENT': return state - 1;
-            default: return state;
-        }
+    function addItem(arr) {
+        // return list.concat([0])
+        return [...arr, 0]
     }
 
-    const store = createStore(reducer);
+    function removeItem(arr, index) {
+        // return arr.slice(0, index).concat(arr.slice(index + 1))
+        return [
+            ...arr.slice(0, index),
+            ...arr.slice(index + 1)
+        ]
+    }
 
-    const Counter = ({ count, inc, dec }) => (
-            <div>
-                <h1>{count}</h1>
-                <button onClick={inc}>+</button>
-                <button onClick={dec}>-</button>
-            </div>
-        );
+    function incrementItem(arr, index) {
+        return [
+            ...arr.slice(0, index),
+            ++arr[index],
+            ...arr.slice(index + 1)
+        ]
+    }
 
-    const render = () => { ReactDOM.render(<Counter 
-                                                count={store.getState()}
-                                                inc={()=> store.dispatch({ type: 'INCREMENT' })}
-                                                dec={()=> store.dispatch({ type: 'DECREMENT' })} />, document.getElementById('root')) };
-    render()
-    store.subscribe(render)
+    const arrBefore_1 = [];
+    Object.freeze(arrBefore_1)
+    const arrAfter_1 = [0];
+    try {
+        expect(
+            addItem(arrBefore_1)
+        ).toEqual(arrAfter_1)
+        console.log('Adding Item Test passed!')
+    } catch (e) {
+        console.error(e.message)
+    }
 
 
+    const arrBefore_2 = [1, 2, 3];
+    Object.freeze(arrBefore_2)
+    const arrAfter_2 = [1, 3];
+    try {
+        expect(
+            removeItem(arrBefore_2, 1)
+        ).toEqual(arrAfter_2)
+        console.log('Removing Item Test passed!')
+    } catch (e) {
+        console.error(e.message)
+    }
 
+
+    const arrBefore_3 = [1, 1, 3];
+    Object.freeze(arrBefore_3)
+    const arrAfter_3 = [1, 2, 3];
+    try {
+        expect(
+            incrementItem(arrBefore_3, 1)
+        ).toEqual(arrAfter_3)
+        console.log('Incrementing Item Test passed!')
+    } catch (e) {
+        console.error(e.message)
+    }
 
 </script>

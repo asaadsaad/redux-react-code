@@ -1,0 +1,32 @@
+<script src="https://unpkg.com/expect@1.20.2/umd/expect.min.js"></script>
+
+<script>
+
+    function toggleObject(obj) {
+        // return {
+        //     name: 'Asaad',
+        //     value: !obj.value
+        // }
+        // return Object.assign({}, obj, { value: !obj.value })
+        return { ...obj, value: !obj.value }
+
+    }
+
+
+
+    const objBefore = { value: true, name: 'Asaad' };
+    Object.freeze(objBefore)
+    const objAfter = { value: false, name: 'Asaad' };
+    try {
+        expect(
+            toggleObject(objBefore)
+        ).toEqual(objAfter)
+        console.log('Toggle Object Test passed!')
+    } catch (e) {
+        console.error(e.message)
+    }
+
+
+
+
+</script>

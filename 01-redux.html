@@ -8,24 +8,27 @@
             default: return state;
         }
     }
+    try {
+        expect(
+            reducer(0, { type: 'INCREMENT' })
+        ).toEqual(1)
+        expect(
+            reducer(1, { type: 'INCREMENT' })
+        ).toEqual(2)
+        expect(
+            reducer(2, { type: 'DECREMENT' })
+        ).toEqual(1)
 
-    expect(
-        reducer(0, { type: 'INCREMENT' })
-    ).toEqual(1)
-    expect(
-        reducer(1, { type: 'INCREMENT' })
-    ).toEqual(2)
-    expect(
-        reducer(2, { type: 'DECREMENT' })
-    ).toEqual(1)
+        expect(
+            reducer(1, { type: 'SOMETHING_ELSE' })
+        ).toEqual(1)
 
-    expect(
-        reducer(1, { type: 'SOMETHING_ELSE' })
-    ).toEqual(1)
+        expect(
+            reducer(undefined, {})
+        ).toEqual(0)
 
-    expect(
-        reducer(undefined, {})
-    ).toEqual(0)
-
-    console.log('Test passed!')
+        console.log('Test passed!')
+    } catch (e) {
+        console.error(e.message)
+    }
 </script>
