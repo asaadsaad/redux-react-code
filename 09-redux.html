@@ -1,0 +1,43 @@
+<script src="https://unpkg.com/expect@1.20.2/umd/expect.min.js"></script>
+
+
+<script>
+
+    // Optional: simplifying the reducer
+
+    function reducer(state = [], action) {
+        switch (action.type) {
+            case 'ADD_OBJECT': return [...state, action.payload];
+            case 'TOGGLE_OBJECT': return state.map(obj => {
+                if (obj.id === action.id) return { ...obj, value: !obj.value }
+                return obj;
+            });
+            default: return state;
+        }
+    }
+
+    // two reducers
+
+    const object_reducer = (obj = {}, action) => {
+        switch (action.type) {
+            case 'ADD_OBJECT': return action.payload;
+            case 'TOGGLE_OBJECT': if (obj.id === action.id) return { ...obj, value: !obj.value }; else return obj;
+            default:
+                return obj;
+        }
+    };
+
+    const array_reducer = (state = [], action) => {
+        switch (action.type) {
+            case 'ADD_OBJECT': return [...state, object_reducer(undefined, action)];
+            case 'TOGGLE_OBJECT': return state.map(obj => object_reducer(obj, action));
+            default:
+                return state;
+        }
+    };
+
+
+
+
+
+</script>

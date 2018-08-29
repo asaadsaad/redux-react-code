@@ -1,0 +1,29 @@
+<script src="https://unpkg.com/expect@1.20.2/umd/expect.min.js"></script>
+
+<script>
+
+    function reducer(state = [], action) {
+        switch (action.type) {
+            case 'ADD_OBJECT': return [...state, action.payload];
+            default: return state;
+        }
+    }
+
+
+    const stateBefore = [];
+    const action = { type: 'ADD_OBJECT', payload: { id: 1, name: 'Asaad' } }
+    Object.freeze(stateBefore)
+    const stateAfter = [{ id: 1, name: 'Asaad' }];
+    try {
+        expect(
+            reducer(stateBefore, action)
+        ).toEqual(stateAfter)
+        console.log('Add Object Test passed!')
+    } catch (e) {
+        console.error(e.message)
+    }
+
+
+
+
+</script>

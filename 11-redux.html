@@ -1,0 +1,54 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.0/redux.min.js"></script>
+<script src="https://unpkg.com/expect@1.20.2/umd/expect.min.js"></script>
+
+<script>
+
+    // original reducer that takes care of managing state as array_of_objects = [{},{}]
+    function reducer(state = [], action) {
+        switch (action.type) {
+            case 'ADD_OBJECT': return [...state, action.payload];
+            case 'TOGGLE_OBJECT': return state.map(obj => {
+                if (obj.id === action.id) return { ...obj, value: !obj.value }
+                return obj;
+            });
+            default: return state;
+        }
+    }
+
+    // we want to reform the state to handle the following shape: { array_of_objects: [{},{}], other_thing: 'hello'}
+
+    function other_thing_reducer(state = 'default', action) {
+        switch (action.type) {
+            case 'SET_OTHER_THING': return action.payload;
+            default: return state;
+        }
+    }
+    // Refactor Using combineReducers method from Redux
+    function app_reducer(appState = {}, action) {
+        return {
+            array_of_objects: reducer(appState.array_of_objects, action),
+            other_thing: other_thing_reducer(appState.other_thing, action)
+        }
+    }
+    // Will be Rewritten as:
+    const { createStore, combineReducers } = Redux;
+
+    const APP_REDUCER = combineReducers({
+        array_of_objects: reducer,
+        other_thing: other_thing_reducer
+    })
+
+    // Test
+
+    const store = createStore(APP_REDUCER);
+
+    const render = () => { console.log(store.getState()) };
+    render()
+    store.subscribe(render)
+
+    const action1 = { type: 'ADD_OBJECT', payload: { id: 1, value: false } }
+    const action2 = { type: 'SET_OTHER_THING', payload: 'hello' }
+    store.dispatch(action1)
+    store.dispatch(action2)
+
+</script>
