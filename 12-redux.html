@@ -53,24 +53,22 @@
                     <button onClick={()=> { 
                         store.dispatch({
                             type: 'ADD_TODO', 
-                            payload: {id: ++todo_id_counter, text: this.textInput.current.value, completed: false}}); 
+                            payload: {id: ++todo_id_counter, text: this.textInput.current.value, completed: false}
+                        }); 
                         this.textInput.current.value = ''; }}>Add Todo</button>
                 </div>
             )
         }
     }
     // It's okay to use store.dispatch here
-    class VisibilityButtons extends React.Component{
-        render(){
-            return(
-                <div>
-                <button onClick={()=>store.dispatch({type: 'CHANGE_VISIBILITY', payload: 'ALL'})}>All</button>
-                <button onClick={()=>store.dispatch({type: 'CHANGE_VISIBILITY', payload: 'ACTIVE'})}>Active</button>
-                <button onClick={()=>store.dispatch({type: 'CHANGE_VISIBILITY', payload: 'COMPLETED'})}>Completed</button>
-            </div>
-            )
-        }
-    }
+    // We could refactor and make Button as dump component
+    const VisibilityButtons = ()=> (
+        <div>
+            <button onClick={()=>store.dispatch({type: 'CHANGE_VISIBILITY', payload: 'ALL'})}>All</button>
+            <button onClick={()=>store.dispatch({type: 'CHANGE_VISIBILITY', payload: 'ACTIVE'})}>Active</button>
+            <button onClick={()=>store.dispatch({type: 'CHANGE_VISIBILITY', payload: 'COMPLETED'})}>Completed</button>
+        </div>
+    )
     // Display Single Todo
     const Todo  = ({todo})=>(
         <li onClick={()=> { 
