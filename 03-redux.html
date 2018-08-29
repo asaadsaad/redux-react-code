@@ -1,0 +1,42 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.0/redux.min.js"></script>
+<script src="https://unpkg.com/expect@1.20.2/umd/expect.min.js"></script>
+
+<body>
+    <div id="root"></div>
+</body>
+
+<script type="text/babel">
+    const { createStore } = Redux;
+
+    function reducer(state = 0, action) {
+        switch (action.type) {
+            case 'INCREMENT': return state + 1;
+            case 'DECREMENT': return state - 1;
+            default: return state;
+        }
+    }
+
+    const store = createStore(reducer);
+
+    const Counter = ({ count, inc, dec }) => (
+            <div>
+                <h1>{count}</h1>
+                <button onClick={inc}>+</button>
+                <button onClick={dec}>-</button>
+            </div>
+        );
+
+    const render = () => { ReactDOM.render(<Counter 
+                                                count={store.getState()}
+                                                inc={()=> store.dispatch({ type: 'INCREMENT' })}
+                                                dec={()=> store.dispatch({ type: 'DECREMENT' })} />, document.getElementById('root')) };
+    render()
+    store.subscribe(render)
+
+
+
+
+</script>
