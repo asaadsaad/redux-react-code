@@ -13,6 +13,8 @@
     const { createStore, combineReducers } = Redux;
     let todo_id_counter = 0;
 
+    // App State is: { todos: [{id, texr, completed}], visivility: 'ALL' }
+    // reducer for "todos"
     function todos_reducer(state = [], action) {
         switch (action.type) {
             case 'ADD_TODO': return [...state, action.payload]
@@ -22,22 +24,23 @@
             default: return state;
         }
     }
-
+    // reducer for "visivility"
     function visibility_reducer(state='ALL', action){
         switch (action.type) {
             case 'CHANGE_VISIBILITY': return action.payload;
             default: return state;
         }        
     }
-
-    const reducer = combineReducers({
+    // App Reducer
+    const appReducer = combineReducers({
         todos: todos_reducer,
         visivility: visibility_reducer
     })
 
-    const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+    const store = createStore(appReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
-
+    // It's okay to use store.dispatch here
+    // this component will send ADD_TODO to store
     class Form extends React.Component{
         constructor(props) {
             super(props);
@@ -56,7 +59,7 @@
             )
         }
     }
-
+    // It's okay to use store.dispatch here
     class VisibilityButtons extends React.Component{
         render(){
             return(
@@ -68,7 +71,7 @@
             )
         }
     }
-
+    // Display Single Todo
     const Todo  = ({todo})=>(
         <li onClick={()=> { 
                             store.dispatch({
@@ -78,6 +81,9 @@
                         }}
                         style={{textDecoration: todo.completed? 'line-through': 'none'}}>{todo.text}</li>
     )
+
+    // App
+    // need to refactor
     class TodoApp extends React.Component{
         render(){
             const { todos, visibility } = this.props;
