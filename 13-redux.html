@@ -13,7 +13,7 @@
     const { createStore, combineReducers } = Redux;
     let todo_id_counter = 0;
 
-    // App State is: { todos: [{id, texr, completed}], visivility: 'ALL' }
+    // App State is: { todos: [{id, text, completed}], visivility: 'ALL' }
     // reducer for "todos"
     function todos_reducer(state = [], action) {
         switch (action.type) {
