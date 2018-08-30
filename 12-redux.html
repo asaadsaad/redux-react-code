@@ -34,7 +34,7 @@
     // App Reducer
     const appReducer = combineReducers({
         todos: todos_reducer,
-        visivility: visibility_reducer
+        visibility: visibility_reducer
     })
 
     const store = createStore(appReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
@@ -106,7 +106,7 @@
     }
     
     // we can refactor to spread the state instead of passing them separately
-    const render = () => { ReactDOM.render(<TodoApp todos={store.getState().todos} visibility={store.getState().visivility} />, document.getElementById('root')) };
+    const render = () => { ReactDOM.render(<TodoApp todos={store.getState().todos} visibility={store.getState().visibility} />, document.getElementById('root')) };
     // const render = () => { ReactDOM.render(<TodoApp {...store.getState()} />, document.getElementById('root')) };
     render()
     store.subscribe(render)
