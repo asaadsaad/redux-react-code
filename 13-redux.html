@@ -41,7 +41,7 @@
 
     // It's okay to use store.dispatch here
     // this component will send ADD_TODO to store
-    // better to remove bahavior
+    // remove bahavior
     class Form extends React.Component{
         constructor(props) {
             super(props);
@@ -51,12 +51,7 @@
             return(
                 <div>
                     <input ref={this.textInput} />
-                    <button onClick={()=> { 
-                        store.dispatch({
-                            type: 'ADD_TODO', 
-                            payload: {id: ++todo_id_counter, text: this.textInput.current.value, completed: false}
-                        }); 
-                        this.textInput.current.value = ''; }}>Add Todo</button>
+                    <button onClick={()=>this.props.onclick(this.textInput.current)}>Add Todo</button>
                 </div>
             )
         }
@@ -71,34 +66,51 @@
         </div>
     )
     // Display Single Todo
-    // better to remove bahavior
-    const Todo  = ({todo})=>(
-        <li onClick={()=> { 
-                            store.dispatch({
-                                type: 'TOGGLE_TODO', 
-                                id: todo.id
-                            })
-                        }}
-            style={{textDecoration: todo.completed? 'line-through': 'none'}}>{todo.text}</li>
+    // remove bahavior
+    // remove logic
+    const Todo = ({text, onclick, completed})=>(
+        <li onClick={onclick}
+            style={completed}>{text}</li>
+    )
+
+    const TodosList = ({todos, visibility})=>(
+        <ul>
+            {todos
+                .filter(todo=> {switch(visibility){
+                    case 'ALL': return true;
+                    case 'ACTIVE': return todo.completed === false;
+                    case 'COMPLETED': return todo.completed === true;
+                }})
+                .map(todo => <Todo 
+                                key={todo.id} 
+                                text={todo.text} 
+                                onclick={()=> { 
+                                    store.dispatch({
+                                        type: 'TOGGLE_TODO', 
+                                        id: todo.id
+                                    })
+                                }}
+                                completed={{textDecoration: todo.completed? 'line-through': 'none'}}
+                            />)}
+        </ul>
     )
 
     // App
-    // need to refactor and remove <ul> to be TodosList
+    // need to refactor
+    // now notice how TodoApp is passing props (todos and visibility to TodosList component
+    // <TodosList todos={todos} visibility={visibility}> // {...this.props}
     class TodoApp extends React.Component{
         render(){
             const { todos, visibility } = this.props;
             return(
                 <div>
-                    <Form />
-                    <ul>
-                        {todos
-                            .filter(todo=> {switch(visibility){
-                                case 'ALL': return true;
-                                case 'ACTIVE': return todo.completed === false;
-                                case 'COMPLETED': return todo.completed === true;
-                            }})
-                            .map(todo => <Todo key={todo.id} todo={todo}/>)}
-                    </ul>
+                    <Form onclick={(input)=> { 
+                        store.dispatch({
+                            type: 'ADD_TODO', 
+                            payload: {id: ++todo_id_counter, text: input.value, completed: false}
+                        }); 
+                        input.value = ''; }} />
+                    <TodosList {...this.props} />
                     <VisibilityButtons />
                 </div>
             );
@@ -107,6 +119,7 @@
     
     // we can refactor to spread the state instead of passing them separately
     const render = () => { ReactDOM.render(<TodoApp todos={store.getState().todos} visibility={store.getState().visivility} />, document.getElementById('root')) };
+    // does not work for some reason! State is updated in Redux but react does not rerender when store is changed!
     // const render = () => { ReactDOM.render(<TodoApp {...store.getState()} />, document.getElementById('root')) };
     render()
     store.subscribe(render)
