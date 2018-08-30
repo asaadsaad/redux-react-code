@@ -151,7 +151,7 @@
 
     const store = createStore(appReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
     // passing the store implicitly to all child components (using Context feature)
-
+    // will read store context using connect()
     const render = () => { ReactDOM.render(
         <Provider store={store}>
             <TodoApp />
