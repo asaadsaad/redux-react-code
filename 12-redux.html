@@ -13,7 +13,7 @@
     const { createStore, combineReducers } = Redux;
     let todo_id_counter = 0;
 
-    // App State is: { todos: [{id, texr, completed}], visivility: 'ALL' }
+    // App State is: { todos: [{id, texr, completed}], visibility: 'ALL' }
     // reducer for "todos"
     function todos_reducer(state = [], action) {
         switch (action.type) {
@@ -24,7 +24,7 @@
             default: return state;
         }
     }
-    // reducer for "visivility"
+    // reducer for "visibility"
     function visibility_reducer(state='ALL', action){
         switch (action.type) {
             case 'CHANGE_VISIBILITY': return action.payload;
