@@ -18,7 +18,7 @@
 
 <script>
 
-    // original reducer that takes care of managing state as array_of_objects = [{},{}]
+    // Current state is array_of_objects = [{},{}]
     function reducer(state = [], action) {
         switch (action.type) {
             case 'ADD_OBJECT': return [...state, action.payload];
@@ -30,7 +30,10 @@
         }
     }
 
-    // we want to reform the state to handle the following shape: { array_of_objects: [{},{}], other_thing: 'hello'}
+    // we want to reform the state and add new property to it to handle the following shape: 
+    // { array_of_objects: [{},{}], other_thing: 'hello'}
+    // instead of changing the original reducer, we will create another new reducer to handle the new property,
+    // then we will combine both reducers
 
     function other_thing_reducer(state = 'default', action) {
         switch (action.type) {
@@ -39,6 +42,7 @@
         }
     }
 
+    // app state is now an object {} which will contain two properties "array_of_objects" and "other_thing"
     function app_reducer(appState = {}, action) {
         return {
             array_of_objects: reducer(appState.array_of_objects, action),
@@ -55,6 +59,9 @@
     const action2 = { type: 'SET_OTHER_THING', payload: 'hello' }
     deepFreeze(state1)
     deepFreeze(state2)
+
+    // initial app state
+    console.log(app_reducer(undefined, { type: '' })) // { array_of_objects: [], other_thing: "default" }
 
     try {
         expect(

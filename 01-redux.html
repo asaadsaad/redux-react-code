@@ -1,6 +1,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.0/redux.min.js"></script>
 <script src="https://unpkg.com/expect@1.20.2/umd/expect.min.js"></script>
 <script>
+    // Creating a Reducer function
     function reducer(state = 0, action) {
         switch (action.type) {
             case 'INCREMENT': return state + 1;

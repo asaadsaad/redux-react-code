@@ -4,6 +4,7 @@
 <body></body>
 
 <script>
+    // Create a store using Redux
     const { createStore } = Redux;
 
     function reducer(state = 0, action) {
@@ -16,10 +17,14 @@
 
     const store = createStore(reducer);
 
+    // This function render() is to display the state from the store
     const render = () => { document.body.innerText = store.getState() };
+    // display the state
     render()
+    // Subscribe to the store, so everytime the state changes: call the function render()
     store.subscribe(render)
 
+    // dispatch an action on document click
     document.addEventListener('click', () => {
         store.dispatch({ type: 'INCREMENT' })
     })

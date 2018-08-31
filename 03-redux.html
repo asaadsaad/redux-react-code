@@ -9,6 +9,7 @@
 </body>
 
 <script type="text/babel">
+    // Using React to display the state instead of vanilla JS
     const { createStore } = Redux;
 
     function reducer(state = 0, action) {
@@ -20,7 +21,8 @@
     }
 
     const store = createStore(reducer);
-
+    
+    // create a App component "Counter"
     const Counter = ({ count, inc, dec }) => (
             <div>
                 <h1>{count}</h1>
@@ -28,7 +30,7 @@
                 <button onClick={dec}>-</button>
             </div>
         );
-
+    // we will pass the state data as props
     const render = () => { ReactDOM.render(<Counter 
                                                 count={store.getState()}
                                                 inc={()=> store.dispatch({ type: 'INCREMENT' })}

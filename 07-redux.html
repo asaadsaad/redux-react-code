@@ -17,11 +17,12 @@
     };
 </script>
 <script>
-
+    // let's assume we have state as array of objects [{id1, value1}, {id2, value2} ...]
+    // This function is to UPDATE one object in the array without mutation
     function reducer(state = [], action) {
         switch (action.type) {
             case 'TOGGLE_OBJECT': return state.map(obj => {
-                if (obj.id === action.id) return { ...obj, value: !obj.value }
+                if (obj.id === action.id) return { ...obj, value: !obj.value } // return new updated object
                 return obj;
             });
             default: return state;

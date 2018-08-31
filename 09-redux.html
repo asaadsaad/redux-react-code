@@ -17,6 +17,8 @@
     }
 
     // two reducers
+    // the idea here is to create a reducer that's responsible on ADD, UPDATE a single object
+    // and another reducer that's responsible on ADD, UPDATE the state [{}, {}...]
 
     const object_reducer = (obj = {}, action) => {
         switch (action.type) {

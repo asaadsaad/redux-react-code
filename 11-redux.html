@@ -3,7 +3,6 @@
 
 <script>
 
-    // original reducer that takes care of managing state as array_of_objects = [{},{}]
     function reducer(state = [], action) {
         switch (action.type) {
             case 'ADD_OBJECT': return [...state, action.payload];
@@ -15,7 +14,6 @@
         }
     }
 
-    // we want to reform the state to handle the following shape: { array_of_objects: [{},{}], other_thing: 'hello'}
 
     function other_thing_reducer(state = 'default', action) {
         switch (action.type) {
@@ -23,13 +21,13 @@
             default: return state;
         }
     }
-    // Refactor Using combineReducers method from Redux
-    function app_reducer(appState = {}, action) {
-        return {
-            array_of_objects: reducer(appState.array_of_objects, action),
-            other_thing: other_thing_reducer(appState.other_thing, action)
-        }
-    }
+    // we will not use this simple app_reducer(), instead we will be using combineReducers from Redux to create APP_REDUCER()
+    // function app_reducer(appState = {}, action) {
+    //     return {
+    //         array_of_objects: reducer(appState.array_of_objects, action),
+    //         other_thing: other_thing_reducer(appState.other_thing, action)
+    //     }
+    // }
     // Will be Rewritten as:
     const { createStore, combineReducers } = Redux;
 
@@ -43,7 +41,7 @@
     const store = createStore(APP_REDUCER);
 
     const render = () => { console.log(store.getState()) };
-    render()
+    render() // initial state: { array_of_objects: [], other_thing: "default" }
     store.subscribe(render)
 
     const action1 = { type: 'ADD_OBJECT', payload: { id: 1, value: false } }
